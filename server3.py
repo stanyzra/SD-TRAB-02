@@ -1,3 +1,4 @@
+import sys
 import socket
 
 
@@ -5,12 +6,22 @@ def server():
     host = "localhost"
     port = 3003
 
-    sk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    protocol = socket.SOCK_STREAM
+    if len(sys.argv) < 2:
+        print("Change the protocol using the command line argument 'udp' or 'tcp' (default is tcp)")
+    else:
+        userChoice = sys.argv[1]
+        if userChoice.lower() == 'udp':
+            protocol = socket.SOCK_DGRAM
+
+    sk = socket.socket(socket.AF_INET, protocol)
 
     sk.bind((host, port))
     sk.listen()
 
-    print(f"Server 3 running and listening to {host}:{port}")
+    protocolName = "TCP" if protocol == socket.SOCK_STREAM else "UDP"
+    print(
+        f"Server 3 running and listening to {host}:{port} (protocol: {protocolName})")
 
     while True:
 
